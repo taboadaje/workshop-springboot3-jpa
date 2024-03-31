@@ -1,5 +1,6 @@
 package com.ensaio.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -20,7 +21,9 @@ public class Category implements Serializable {
 
     //Usaremos provisoriamente o @Transient para evitar que o jpa tente interpretar o SET pois caso contrário irá
     // dar erro no teste
-    @Transient
+    //@Transient
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
     public Category() {

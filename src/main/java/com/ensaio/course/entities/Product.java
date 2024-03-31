@@ -26,7 +26,11 @@ public class Product implements Serializable {
     //se tenha mais de uma categoria por produto.
     //Usaremos provisoriamente o @Transient para evitar que o jpa tente interpretar o SET pois caso contrário irá
     // dar erro no teste
-    @Transient
+    //@Transient
+    @ManyToMany
+    @JoinTable(name = "tb_product_category",
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     public Product() {
