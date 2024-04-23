@@ -2,9 +2,12 @@ package com.ensaio.course.services;
 
 import com.ensaio.course.entities.User;
 import com.ensaio.course.repositories.UserRepository;
+import com.ensaio.course.services.exceptions.DatabaseException;
 import com.ensaio.course.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +36,14 @@ public class UserService {
     }
 
     public void delete (Long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+
     }
 
     public User update (Long id, User obj) {
